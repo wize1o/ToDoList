@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>To do list</title>
+  </head>
+  <body>
+<h1 style="color:purple">It is <%= DAY %>!!!!!!! </h1>
+<ul>
+
+
+        <% newItems.forEach(function(item){  %>
+          <li>
+
+            <%= item %>
+            </li>
+      <%  }); %>
+
+
+  </ul>
+  <form action="/" method="post">
+<input type="text" name="newItem" placeholder="New to do item">
+<button type="submit" name="submit">Add new item</button>
+  </form>
+  </body>
+</html>
