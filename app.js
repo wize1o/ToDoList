@@ -1,37 +1,46 @@
 //jshint esversion 6
 const express = require("express");
 const bodyparser = require("body-parser");
+const date = require(__dirname + "/date.js");
 
 const app = express();
 
 app.set("view engine", "ejs");
 
+//This sets up public folder and that is where you put all static files like css and images
+app.use(express.static("public"));
 app.use(bodyparser.urlencoded({ extended: true }));
 
-var items = [];
+let items = [];
+
+let workItems = [];
 
 //this is a route
 app.get("/", function(req, res) {
-  var today = new Date();
-  var currentDay = today.getDay();
-  var day = "";
-
-  var options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long"
-  };
-
-  var day = today.toLocaleDateString("en-US", options);
-  res.render("list", { DAY: day, newItems: items });
+  let dayDate = date.getDate();
+  let dayDay = date.getDay();
+  res.render("list", { listTitle: dayDate, newItems: items, day: dayDay });
 });
 
 app.post("/", function(req, res) {
-  item = req.body.newItem;
+  let item = req.body.newItem;
+  if (req.body.list === "Work") {
+    workItems.push(item);
 
-  items.push(item);
-  // console.log("item: " + item);
-  res.redirect("/");
+    res.redirect("/work");
+  } else {
+    items.push(item);
+    // console.log("item: " + item);
+    res.redirect("/");
+  }
+});
+
+app.get("/work", function(req, res) {
+  res.render("list", { listTitle: "Work List", newItems: workItems });
+});
+
+app.get("/about", function(req, res) {
+  res.render("about");
 });
 
 app.listen(process.env.PORT || 3000, function() {
